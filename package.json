@@ -1,0 +1,51 @@
+{
+  "name": "quizar-api",
+  "version": "0.0.1",
+  "description": "Quizar API",
+  "main": "./lib/app.js",
+  "private": true,
+  "scripts": {
+    "start": "tsc && node ./lib/app.js",
+    "pretest": "npm run tsc",
+    "test": "mocha",
+    "tsc": "tsc",
+    "tscw": "tsc -w",
+    "preversion": "npm run tsc",
+    "postversion": "git push --follow-tags",
+    "prepublish": "npm run tsc"
+  },
+  "engines": {
+    "node": ">=4.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/quizar/api-js.git"
+  },
+  "keywords": [
+    "quizar",
+    "api"
+  ],
+  "author": "Dumitru Cantea",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/quizar/api-js/issues"
+  },
+  "homepage": "https://github.com/quizar/api-js#readme",
+  "devDependencies": {
+    "@types/express": "^4.0.36",
+    "@types/graphql": "^0.9.1",
+    "@types/node": "^7.0.31",
+    "mocha": "^3.4.2",
+    "typescript": "^2.3.4"
+  },
+  "dependencies": {
+    "bluebird": "^3.5.0",
+    "dotenv": "^4.0.0",
+    "express": "^4.15.3",
+    "express-graphql": "^0.6.6",
+    "graphql": "^0.9.6",
+    "graphql-type-json": "^0.1.4",
+    "ournet.logger": "^0.1.0",
+    "transparentcache": "^1.0.0"
+  }
+}
