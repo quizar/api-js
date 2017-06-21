@@ -4,8 +4,7 @@ require('dotenv').config();
 require('./data');
 import * as express from 'express';
 import { logger } from './logger';
-import { schema } from './graphql/schema';
-import { rootValue } from './graphql/root-value';
+import { schema } from './graphql';
 
 const graphqlHTTP = require('express-graphql');
 const isProduction = process.env.NODE_ENV === 'production';
@@ -14,7 +13,6 @@ const server = express();
 
 server.use('/graphql', graphqlHTTP({
     schema: schema,
-    rootValue: rootValue,
     graphiql: !isProduction
 }));
 
