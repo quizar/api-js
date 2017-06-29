@@ -1,6 +1,6 @@
 
 import { GraphQLObjectType, GraphQLString, GraphQLNonNull, GraphQLInt, GraphQLList, GraphQLInputObjectType, GraphQLEnumType } from 'graphql';
-import { ValueType } from './common';
+import { ValueType, QuizTargetType } from './common';
 
 const GraphQLJsonType = require('graphql-type-json');
 
@@ -133,6 +133,68 @@ export const InputQuizItem = new GraphQLInputObjectType({
         },
         topics: {
             type: new GraphQLList(InputWikiEntity)
+        }
+    }
+});
+
+export const InputQuizItemInfo = new GraphQLInputObjectType({
+    name: 'InputQuizItemInfo',
+    fields:
+    {
+        order: {
+            type: GraphQLInt
+        },
+        item: {
+            type: new GraphQLNonNull(InputQuizItem)
+        },
+        target: {
+            type: QuizTargetType
+        },
+        question: {
+            type: GraphQLString
+        },
+        description: {
+            type: GraphQLString
+        },
+        title: {
+            type: GraphQLString
+        },
+        image: {
+            type: InputImage
+        }
+    }
+});
+
+export const InputQuiz = new GraphQLInputObjectType({
+    name: 'InputQuiz',
+    fields:
+    {
+        id: {
+            type: GraphQLString
+        },
+        lang: {
+            type: GraphQLString
+        },
+        target: {
+            type: QuizTargetType
+        },
+        question: {
+            type: GraphQLString
+        },
+        description: {
+            type: GraphQLString
+        },
+        title: {
+            type: GraphQLString
+        },
+        image: {
+            type: InputImage
+        },
+        topics: {
+            type: new GraphQLList(InputWikiEntity)
+        },
+        items: {
+            type: new GraphQLList(InputQuizItemInfo)
         }
     }
 });

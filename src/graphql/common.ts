@@ -9,3 +9,11 @@ export const ValueType = new GraphQLEnumType({
     ENTITY: { value: 'ENTITY' }
   }
 });
+
+export const QuizTargetType = new GraphQLEnumType({
+  name: 'QuizTargetType',
+  values: {
+    PVALUE: { value: 'PVALUE' },
+    QVALUE: { value: 'QVALUE' }
+  }
+});
