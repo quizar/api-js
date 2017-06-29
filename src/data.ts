@@ -1,5 +1,5 @@
 
-import { Promise } from './utils';
+// import { Promise } from './utils';
 import { logger } from './logger';
 import { QuizUseCases, QuizItemUseCases, WikiEntityUseCases } from 'quizar-domain';
 import { createDbConnection, WikiEntityRepository, QuizItemRepository, QuizRepository } from 'quizar-data-mongo';

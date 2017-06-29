@@ -1,5 +1,7 @@
 
-export const Promise = require('bluebird');
+import { Bluebird } from 'quizar-domain';
+
+export { Bluebird };
 
 export type RequestContextType = {
     user?: RequestUser

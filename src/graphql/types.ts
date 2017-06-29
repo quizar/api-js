@@ -2,6 +2,10 @@
 import { GraphQLObjectType, GraphQLString, GraphQLNonNull, GraphQLInt, GraphQLList, GraphQLEnumType } from 'graphql';
 import { ValueType } from './common';
 
+import { entityUseCases, quizUseCases, quizItemUseCases } from '../data';
+import { logger } from '../logger';
+import { PropertyValueType } from 'quizar-domain';
+
 const GraphQLJsonType = require('graphql-type-json');
 
 export const Image = new GraphQLObjectType({
@@ -84,14 +88,22 @@ export const PropertyValue = new GraphQLObjectType({
     name: 'PropertyValue',
     fields:
     {
-        entity: {
-            type: WikiEntity
+        type: {
+            type: new GraphQLNonNull(ValueType)
         },
         value: {
             type: new GraphQLNonNull(GraphQLString)
         },
-        type: {
-            type: new GraphQLNonNull(ValueType)
+        entity: {
+            type: WikiEntity,
+            resolve(source, args, context, info) {
+                console.log('get PropertyValue entity source', source);
+                console.log('get PropertyValue entity info', info);
+                if (source.type === PropertyValueType.ENTITY) {
+                    return entityUseCases.getById(source.value);
+                }
+                return null;
+            }
         }
     }
 });
@@ -107,7 +119,15 @@ export const QuizItem = new GraphQLObjectType({
             type: new GraphQLNonNull(GraphQLString)
         },
         entity: {
-            type: WikiEntity
+            type: WikiEntity,
+            resolve(source, args, context, info) {
+                // console.log('get QuizItem entity source', source);
+                // console.log('get QuizItem entity info', info.fieldNodes[0].selectionSet.selections);
+                if (source.entity && source.entity.id && info.fieldNodes[0].selectionSet.selections.length > 1) {
+                    return entityUseCases.getById(source.entity.id);
+                }
+                return source.entity;
+            }
         },
         description: {
             type: GraphQLString

@@ -42,10 +42,10 @@ export const InputWikiEntity = new GraphQLInputObjectType({
             type: new GraphQLNonNull(GraphQLString)
         },
         lang: {
-            type: new GraphQLNonNull(GraphQLString)
+            type: GraphQLString
         },
         label: {
-            type: new GraphQLNonNull(GraphQLString)
+            type: GraphQLString
         },
         description: {
             type: GraphQLString
@@ -105,7 +105,7 @@ export const InputQuizItem = new GraphQLInputObjectType({
             type: GraphQLString
         },
         lang: {
-            type: new GraphQLNonNull(GraphQLString)
+            type: GraphQLString
         },
         entity: {
             type: InputWikiEntity
