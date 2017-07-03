@@ -11,4 +11,4 @@ const quizItemRepository = new QuizItemRepository(connection);
 
 export const entityUseCases = new WikiEntityUseCases(wikiEntityRepository);
 export const quizItemUseCases = new QuizItemUseCases(quizItemRepository, entityUseCases);
-export const quizUseCases = new QuizUseCases(quizRepository, entityUseCases);
+export const quizUseCases = new QuizUseCases(quizRepository, entityUseCases, quizItemRepository);

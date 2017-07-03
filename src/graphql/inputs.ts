@@ -1,6 +1,6 @@
 
 import { GraphQLObjectType, GraphQLString, GraphQLNonNull, GraphQLInt, GraphQLList, GraphQLInputObjectType, GraphQLEnumType } from 'graphql';
-import { ValueType, QuizTargetType } from './common';
+import { ValueType, QuizTargetType, WikiEntityType } from './common';
 
 const GraphQLJsonType = require('graphql-type-json');
 
@@ -16,23 +16,6 @@ export const InputImage = new GraphQLInputObjectType({
         }
     }
 });
-
-export const InputPropertyQualifier = new GraphQLInputObjectType({
-    name: 'InputPropertyQualifier',
-    fields:
-    {
-        id: {
-            type: new GraphQLNonNull(GraphQLString)
-        },
-        value: {
-            type: new GraphQLNonNull(GraphQLString)
-        },
-        type: {
-            type: new GraphQLNonNull(ValueType)
-        }
-    }
-});
-
 
 export const InputWikiEntity = new GraphQLInputObjectType({
     name: 'InputWikiEntity',
@@ -56,11 +39,17 @@ export const InputWikiEntity = new GraphQLInputObjectType({
         props: {
             type: GraphQLJsonType
         },
+        type: {
+            type: WikiEntityType
+        },
         types: {
             type: new GraphQLList(GraphQLString)
         },
         pageTitle: {
             type: GraphQLString
+        },
+        pageId: {
+            type: GraphQLInt
         },
         extract: {
             type: GraphQLString
@@ -76,14 +65,23 @@ export const InputWikiEntity = new GraphQLInputObjectType({
         },
         name: {
             type: GraphQLString
+        },
+        cc2: {
+            type: GraphQLString
+        },
+        rank: {
+            type: GraphQLInt
         }
     }
 });
 
-export const InputPropertyValue = new GraphQLInputObjectType({
-    name: 'InputPropertyValue',
+export const InputWikiProperty = new GraphQLInputObjectType({
+    name: 'InputWikiProperty',
     fields:
     {
+        id: {
+            type: new GraphQLNonNull(GraphQLString)
+        },
         entity: {
             type: InputWikiEntity
         },
@@ -116,11 +114,11 @@ export const InputQuizItem = new GraphQLInputObjectType({
         propertyId: {
             type: GraphQLString
         },
-        value: {
-            type: InputPropertyValue
+        property: {
+            type: InputWikiProperty
         },
         qualifier: {
-            type: InputPropertyQualifier
+            type: InputWikiProperty
         },
         title: {
             type: GraphQLString

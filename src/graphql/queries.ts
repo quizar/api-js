@@ -4,6 +4,7 @@ import { entityUseCases, quizUseCases, quizItemUseCases } from '../data';
 import { logger } from '../logger';
 import { WikiEntity, QuizItem } from './types';
 import { } from './inputs';
+import { getSelectFields } from './common';
 
 export const queries = {
     getWikiEntity: {
@@ -13,8 +14,8 @@ export const queries = {
                 type: new GraphQLNonNull(GraphQLString)
             }
         },
-        resolve(source, args: { id: string }, context) {
-            return entityUseCases.getById(args.id);
+        resolve(source, args: { id: string }, context, info) {
+            return entityUseCases.getById(args.id, { fields: getSelectFields(info.fieldNodes[0].selectionSet) });
         }
     },
     getQuizItem: {
@@ -24,8 +25,13 @@ export const queries = {
                 type: new GraphQLNonNull(GraphQLString)
             }
         },
-        resolve(source, args: { id: string }, context) {
-            return quizItemUseCases.getById(args.id);
+        resolve(source, args: { id: string }, context, info) {
+            const fields = getSelectFields(info.fieldNodes[0].selectionSet, ['entity.id', 'property.value', 'qualifier.value']);
+            console.log('fields', fields);
+            return quizItemUseCases.getById(args.id, { fields: fields }).then(result=>{
+                console.log(result);
+                return result;
+            });
         }
     }
 };

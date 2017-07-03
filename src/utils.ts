@@ -1,7 +1,7 @@
 
-import { Bluebird } from 'quizar-domain';
+import { Bluebird, _ } from 'quizar-domain';
 
-export { Bluebird };
+export { Bluebird, _ };
 
 export type RequestContextType = {
     user?: RequestUser

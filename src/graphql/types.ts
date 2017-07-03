@@ -1,6 +1,6 @@
 
 import { GraphQLObjectType, GraphQLString, GraphQLNonNull, GraphQLInt, GraphQLList, GraphQLEnumType } from 'graphql';
-import { ValueType, QuizTargetType } from './common';
+import { ValueType, QuizTargetType, WikiEntityType, getSelectFields } from './common';
 
 import { entityUseCases, quizUseCases, quizItemUseCases } from '../data';
 import { logger } from '../logger';
@@ -29,10 +29,10 @@ export const WikiEntity = new GraphQLObjectType({
             type: new GraphQLNonNull(GraphQLString)
         },
         lang: {
-            type: new GraphQLNonNull(GraphQLString)
+            type: GraphQLString
         },
         label: {
-            type: new GraphQLNonNull(GraphQLString)
+            type: GraphQLString
         },
         description: {
             type: GraphQLString
@@ -43,11 +43,17 @@ export const WikiEntity = new GraphQLObjectType({
         props: {
             type: GraphQLJsonType
         },
+        type: {
+            type: WikiEntityType
+        },
         types: {
             type: new GraphQLList(GraphQLString)
         },
         pageTitle: {
             type: GraphQLString
+        },
+        pageId: {
+            type: GraphQLInt
         },
         extract: {
             type: GraphQLString
@@ -63,43 +69,25 @@ export const WikiEntity = new GraphQLObjectType({
         },
         name: {
             type: GraphQLString
+        },
+        cc2: {
+            type: GraphQLString
+        },
+        rank: {
+            type: GraphQLInt
         }
     }
 });
 
-export const PropertyQualifier = new GraphQLObjectType({
-    name: 'PropertyQualifier',
+export const WikiProperty = new GraphQLObjectType({
+    name: 'WikiProperty',
     fields:
     {
         id: {
             type: new GraphQLNonNull(GraphQLString)
         },
-        value: {
-            type: new GraphQLNonNull(GraphQLString)
-        },
         type: {
-            type: new GraphQLNonNull(ValueType)
-        },
-        entity: {
-            type: WikiEntity,
-            resolve(source, args, context, info) {
-                console.log('get PropertyQualifier entity source', source);
-                // console.log('get PropertyQualifier entity info', info);
-                if (isEntityId(source.value)) {
-                    return entityUseCases.getById(source.value);
-                }
-                return null;
-            }
-        }
-    }
-});
-
-export const PropertyValue = new GraphQLObjectType({
-    name: 'PropertyValue',
-    fields:
-    {
-        type: {
-            type: new GraphQLNonNull(ValueType)
+            type: ValueType
         },
         value: {
             type: new GraphQLNonNull(GraphQLString)
@@ -107,10 +95,10 @@ export const PropertyValue = new GraphQLObjectType({
         entity: {
             type: WikiEntity,
             resolve(source, args, context, info) {
-                console.log('get PropertyValue entity source', source);
-                // console.log('get PropertyValue entity info', info);
-                if (isEntityId(source.value)) {
-                    return entityUseCases.getById(source.value);
+                console.log('get WikiProperty entity source', source);
+                // console.log('get WikiProperty entity info', info);
+                if (isEntityId(source.value) && info.fieldNodes[0].selectionSet.selections.length > 1) {
+                    return entityUseCases.getById(source.value, { fields: getSelectFields(info.fieldNodes[0].selectionSet, ['id']) });
                 }
                 return null;
             }
@@ -131,10 +119,8 @@ export const QuizItem = new GraphQLObjectType({
         entity: {
             type: WikiEntity,
             resolve(source, args, context, info) {
-                // console.log('get QuizItem entity source', source);
-                // console.log('get QuizItem entity info', info.fieldNodes[0].selectionSet.selections);
                 if (source.entity && source.entity.id && info.fieldNodes[0].selectionSet.selections.length > 1) {
-                    return entityUseCases.getById(source.entity.id);
+                    return entityUseCases.getById(source.entity.id, { fields: getSelectFields(info.fieldNodes[0].selectionSet, ['id']) });
                 }
                 return source.entity;
             }
@@ -142,14 +128,11 @@ export const QuizItem = new GraphQLObjectType({
         description: {
             type: GraphQLString
         },
-        propertyId: {
-            type: GraphQLString
-        },
-        value: {
-            type: PropertyValue
+        property: {
+            type: WikiProperty
         },
         qualifier: {
-            type: PropertyQualifier
+            type: WikiProperty
         },
         title: {
             type: GraphQLString

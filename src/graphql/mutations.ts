@@ -100,14 +100,19 @@ export const mutations = {
         resolve(source, args: { quizId, data }, context: RequestContextType) {
             logger.info('quizAddQuizItemInfo', args);
             // args.data.userId = context.user.id;
-            return quizUseCases.addQuizItemInfo(args.quizId, args.data).catch(e => {
-                console.log('error data', e.data);
-                return Bluebird.reject(e);
-            })
+            return quizUseCases.addQuizItemInfo(args.quizId, args.data)
+                .then(r => {
+                    console.log('result', JSON.stringify(r));
+                    return r;
+                })
+                .catch(e => {
+                    console.log('error data', e.data);
+                    return Bluebird.reject(e);
+                })
         }
     },
     quizRemoveQuizItemInfo: {
-        type: QuizItemInfo,
+        type: GraphQLBoolean,
         args: {
             quizId: {
                 type: new GraphQLNonNull(GraphQLString)
