@@ -79,8 +79,59 @@ export const WikiEntity = new GraphQLObjectType({
     }
 });
 
-export const WikiProperty = new GraphQLObjectType({
-    name: 'WikiProperty',
+export const EntityPropertyValueQualifier = new GraphQLObjectType({
+    name: 'EntityPropertyValueQualifier',
+    fields:
+    {
+        id: {
+            type: new GraphQLNonNull(GraphQLString)
+        },
+        value: {
+            type: new GraphQLNonNull(GraphQLString)
+        },
+        type: {
+            type: new GraphQLNonNull(ValueType)
+        },
+        entity: {
+            type: WikiEntity,
+            resolve(source, args, context, info) {
+                console.log('get EntityPropertyValueQualifier entity source', source);
+                // console.log('get WikiProperty entity info', info);
+                if (isEntityId(source.value) && info.fieldNodes[0].selectionSet.selections.length > 1) {
+                    return entityUseCases.getById(source.value, { fields: getSelectFields(info.fieldNodes[0].selectionSet, ['id']) });
+                }
+                return null;
+            }
+        }
+    }
+});
+
+export const EntityPropertyValue = new GraphQLObjectType({
+    name: 'EntityPropertyValue',
+    fields:
+    {
+        value: {
+            type: new GraphQLNonNull(GraphQLString)
+        },
+        entity: {
+            type: WikiEntity,
+            resolve(source, args, context, info) {
+                console.log('get EntityPropertyValue entity source', source);
+                // console.log('get WikiProperty entity info', info);
+                if (isEntityId(source.value) && info.fieldNodes[0].selectionSet.selections.length > 1) {
+                    return entityUseCases.getById(source.value, { fields: getSelectFields(info.fieldNodes[0].selectionSet, ['id']) });
+                }
+                return null;
+            }
+        },
+        qualifiers: {
+            type: new GraphQLList(EntityPropertyValueQualifier)
+        }
+    }
+});
+
+export const EntityProperty = new GraphQLObjectType({
+    name: 'EntityProperty',
     fields:
     {
         id: {
@@ -89,8 +140,8 @@ export const WikiProperty = new GraphQLObjectType({
         type: {
             type: ValueType
         },
-        value: {
-            type: new GraphQLNonNull(GraphQLString)
+        values: {
+            type: new GraphQLList(EntityPropertyValue)
         },
         entity: {
             type: WikiEntity,
@@ -129,10 +180,7 @@ export const QuizItem = new GraphQLObjectType({
             type: GraphQLString
         },
         property: {
-            type: WikiProperty
-        },
-        qualifier: {
-            type: WikiProperty
+            type: EntityProperty
         },
         title: {
             type: GraphQLString

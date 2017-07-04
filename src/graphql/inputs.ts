@@ -75,21 +75,56 @@ export const InputWikiEntity = new GraphQLInputObjectType({
     }
 });
 
-export const InputWikiProperty = new GraphQLInputObjectType({
-    name: 'InputWikiProperty',
+export const InputEntityPropertyValueQualifier = new GraphQLInputObjectType({
+    name: 'InputEntityPropertyValueQualifier',
     fields:
     {
         id: {
             type: new GraphQLNonNull(GraphQLString)
-        },
-        entity: {
-            type: InputWikiEntity
         },
         value: {
             type: new GraphQLNonNull(GraphQLString)
         },
         type: {
             type: new GraphQLNonNull(ValueType)
+        },
+        entity: {
+            type: InputWikiEntity
+        }
+    }
+});
+
+export const InputEntityPropertyValue = new GraphQLInputObjectType({
+    name: 'InputEntityPropertyValue',
+    fields:
+    {
+        value: {
+            type: new GraphQLNonNull(GraphQLString)
+        },
+        entity: {
+            type: InputWikiEntity
+        },
+        qualifiers: {
+            type: new GraphQLList(InputEntityPropertyValueQualifier)
+        }
+    }
+});
+
+export const InputEntityProperty = new GraphQLInputObjectType({
+    name: 'InputEntityProperty',
+    fields:
+    {
+        id: {
+            type: new GraphQLNonNull(GraphQLString)
+        },
+        type: {
+            type: new GraphQLNonNull(ValueType)
+        },
+        values: {
+            type: new GraphQLNonNull(new GraphQLList(InputEntityPropertyValue))
+        },
+        entity: {
+            type: InputWikiEntity
         }
     }
 });
@@ -111,14 +146,8 @@ export const InputQuizItem = new GraphQLInputObjectType({
         description: {
             type: GraphQLString
         },
-        propertyId: {
-            type: GraphQLString
-        },
         property: {
-            type: InputWikiProperty
-        },
-        qualifier: {
-            type: InputWikiProperty
+            type: InputEntityProperty
         },
         title: {
             type: GraphQLString

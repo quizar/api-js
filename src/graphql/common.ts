@@ -31,7 +31,7 @@ export const WikiEntityType = new GraphQLEnumType({
   }
 });
 
-export function getSelectFields(selectionSet: { selections: {}[] }, required?: string[]): string {
+export function getSelectFields(selectionSet: { selections: {}[] }, required?: string[]): string[] {
   return null;
   // console.log(JSON.stringify(selectionSet.selections));
   // const fields = _.uniq(formatSelectFields(selectionSet).concat(required || []));
