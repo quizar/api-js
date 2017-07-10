@@ -33,7 +33,7 @@ export const mutations = {
         resolve(source, args: { data }, context: RequestContextType) {
             logger.info('createQuizItem', args);
             // args.data.userId = context.user.id;
-            return quizItemUseCases.create(args.data).catch(e => {
+            return quizItemUseCases.create.execute(args.data).catch(e => {
                 console.log('error data', e.data);
                 return Bluebird.reject(e);
             })
@@ -49,7 +49,7 @@ export const mutations = {
         resolve(source, args: { data }, context: RequestContextType) {
             logger.info('updateQuizItem', args);
             // args.data.userId = context.user.id;
-            return quizItemUseCases.update(args.data).catch(e => {
+            return quizItemUseCases.update.execute(args.data).catch(e => {
                 console.log('error data', e.data);
                 return Bluebird.reject(e);
             })
@@ -65,7 +65,7 @@ export const mutations = {
         resolve(source, args: { data }, context: RequestContextType) {
             logger.info('createQuiz', args);
             // args.data.userId = context.user.id;
-            return quizUseCases.create(args.data).catch(e => {
+            return quizUseCases.create.execute(args.data).catch(e => {
                 console.log('error data', e.data);
                 return Bluebird.reject(e);
             })
@@ -81,7 +81,7 @@ export const mutations = {
         resolve(source, args: { data }, context: RequestContextType) {
             logger.info('updateQuiz', args);
             // args.data.userId = context.user.id;
-            return quizUseCases.update(args.data).catch(e => {
+            return quizUseCases.update.execute(args.data).catch(e => {
                 console.log('error data', e.data);
                 return Bluebird.reject(e);
             })
@@ -100,7 +100,7 @@ export const mutations = {
         resolve(source, args: { quizId, data }, context: RequestContextType) {
             logger.info('quizAddQuizItemInfo', args);
             // args.data.userId = context.user.id;
-            return quizUseCases.addQuizItemInfo(args.quizId, args.data)
+            return quizUseCases.addQuizItem.execute(args.quizId, args.data)
                 .then(r => {
                     console.log('result', JSON.stringify(r));
                     return r;
@@ -124,7 +124,7 @@ export const mutations = {
         resolve(source, args: { quizId, quizItemId }, context: RequestContextType) {
             logger.info('quizRemoveQuizItemInfo', args);
             // args.data.userId = context.user.id;
-            return quizUseCases.removeQuizItemInfo(args.quizId, args.quizItemId).catch(e => {
+            return quizUseCases.removeQuizItem.execute(args.quizId, args.quizItemId).catch(e => {
                 console.log('error data', e.data);
                 return Bluebird.reject(e);
             })

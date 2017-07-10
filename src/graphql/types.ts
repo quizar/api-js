@@ -98,7 +98,7 @@ export const EntityPropertyValueQualifier = new GraphQLObjectType({
                 console.log('get EntityPropertyValueQualifier entity source', source);
                 // console.log('get WikiProperty entity info', info);
                 if (isEntityId(source.value) && info.fieldNodes[0].selectionSet.selections.length > 1) {
-                    return entityUseCases.getById(source.value, { fields: getSelectFields(info.fieldNodes[0].selectionSet, ['id']) });
+                    return entityUseCases.getById.execute(source.value, { fields: getSelectFields(info.fieldNodes[0].selectionSet, ['id']) });
                 }
                 return null;
             }
@@ -119,7 +119,7 @@ export const EntityPropertyValue = new GraphQLObjectType({
                 console.log('get EntityPropertyValue entity source', source);
                 // console.log('get WikiProperty entity info', info);
                 if (isEntityId(source.value) && info.fieldNodes[0].selectionSet.selections.length > 1) {
-                    return entityUseCases.getById(source.value, { fields: getSelectFields(info.fieldNodes[0].selectionSet, ['id']) });
+                    return entityUseCases.getById.execute(source.value, { fields: getSelectFields(info.fieldNodes[0].selectionSet, ['id']) });
                 }
                 return null;
             }
@@ -142,17 +142,6 @@ export const EntityProperty = new GraphQLObjectType({
         },
         values: {
             type: new GraphQLList(EntityPropertyValue)
-        },
-        entity: {
-            type: WikiEntity,
-            resolve(source, args, context, info) {
-                console.log('get WikiProperty entity source', source);
-                // console.log('get WikiProperty entity info', info);
-                if (isEntityId(source.value) && info.fieldNodes[0].selectionSet.selections.length > 1) {
-                    return entityUseCases.getById(source.value, { fields: getSelectFields(info.fieldNodes[0].selectionSet, ['id']) });
-                }
-                return null;
-            }
         }
     }
 });
@@ -171,7 +160,7 @@ export const QuizItem = new GraphQLObjectType({
             type: WikiEntity,
             resolve(source, args, context, info) {
                 if (source.entity && source.entity.id && info.fieldNodes[0].selectionSet.selections.length > 1) {
-                    return entityUseCases.getById(source.entity.id, { fields: getSelectFields(info.fieldNodes[0].selectionSet, ['id']) });
+                    return entityUseCases.getById.execute(source.entity.id, { fields: getSelectFields(info.fieldNodes[0].selectionSet, ['id']) });
                 }
                 return source.entity;
             }
